@@ -66,15 +66,18 @@ public class PermissionHandler {
                 // Check for Rationale Option
                 hasRights = true;
                 boolean shouldShowRequestPermissionRationale = false;
-                String message = "You need to grant access to ";
+                StringBuilder message = new StringBuilder("You need to grant access to ");
                 for (int i = 0; i < permissionsRequested.length; i++) {
                     Log.i(LibraryInfo.TAG,"i:" + i + ":" + permissionsRequested[i] + ":" + grantResults[i] );
                     if( grantResults[i] != PackageManager.PERMISSION_GRANTED ) {
-                        hasRights = false;
                         if( ActivityCompat.shouldShowRequestPermissionRationale(activity,permissionsRequested[i]) ) {
                             shouldShowRequestPermissionRationale = true;
-                            message = message + ", " + permissionsRequested[i];
+                            if( !hasRights ) {
+                                message.append(", ");
+                            }
+                            message.append(permissionsRequested[i]);
                         }
+                        hasRights = false;
                     }
                 }
                 if( shouldShowRequestPermissionRationale ) {
